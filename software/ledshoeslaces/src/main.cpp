@@ -1,14 +1,56 @@
 
 #include <Arduino.h>
 #include <FastLED.h>
+#include <Button.h>
 
 #define REDPIN 6
 #define BLUEPIN 5
 #define GREENPIN 3
 
+#define BTNPIN 8
+
+#define PULLUP true
+#define INVERT true
+#define DEBOUNCEMS 25
+
+CHSV acc(10, 10, 10);
+CHSV speed(0, 0, 0);
+CHSV mod(1, 1, 1);
+CHSV led(0, 255, 255);
+
+bool hdir = true;
+bool vdir = true;
+bool sdir = true;
+
+uint8_t count = 0;
+
+enum FeaturesEnum
+{
+  None = 0,
+  ChangeHue = 1,
+  ChangeSat = 2,
+  ChangeVal = 4,
+  FollowSin = 8,
+  Randomize = 16
+};
+
+enum ModeEnum
+{
+    ManualColor = 0,
+    ManualColorEditing = 1,
+    Rainbow = 2,
+    Crazy = 3
+};
+
+ModeEnum mode = ManualColor;
+FeaturesEnum features = None;
+
+Button btn(BTNPIN, PULLUP, INVERT, DEBOUNCEMS);
+
 /**
  * This utility method provide display on leds.
  */
+
 void show(const CRGB& rgb, uint16_t duration = 0)
 {
   analogWrite(REDPIN, rgb.r);
@@ -21,13 +63,113 @@ void show(const CRGB& rgb, uint16_t duration = 0)
   }
 }
 
+
+void show(const CHSV& hsv, uint16_t duration = 0)
+{
+  CRGB rgb;
+
+  hsv2rgb_rainbow(hsv, rgb);
+
+  show(rgb, duration);
+}
+
+
 void check()
 {
+  show(CRGB::White, 500);
   show(CRGB::Red, 500);
   show(CRGB::Blue, 500);
   show(CRGB::Green, 500);
   show(CRGB::Black, 500);
 }
+
+
+void cursor(const uint8_t acc, const uint8_t mod,
+  uint8_t &speed, uint8_t &position, bool &dir, bool reverse)
+{
+  if ((count % mod) == 0)
+  {
+    uint8_t delta = 1;
+
+    if ((features & FollowSin) != 0)
+    {
+      delta = sin((float)map(speed, 0, 255, 0, 360) * M_PI / 180.0) * acc;
+      speed++;
+    }
+
+    if (reverse && (position + delta) < position)
+    {
+      dir = !dir;
+    }
+
+    if (dir)
+    {
+      position += delta;
+    }
+    else
+    {
+      position -= delta;
+    }
+  }
+}
+
+void updateDisplay()
+{
+  show(led, 5);
+
+  if ((features & ChangeHue) != 0)
+  {
+    cursor(acc.h, mod.h, speed.h, led.h, hdir, false);
+  }
+
+  if ((features & ChangeVal) != 0)
+  {
+    cursor(acc.v, mod.v, speed.v, led.v, vdir, true);
+  }
+
+  if ((features & ChangeSat) != 0)
+  {
+    cursor(acc.s, mod.s, speed.s, led.s, sdir, true);
+  }
+
+  count++;
+}
+
+void randomize()
+{
+  acc.h = random(5, 15);
+  acc.v = random(5, 15);
+  acc.s = random(5, 15);
+  mod.h = random(1, 5);
+  mod.v = random(1, 5);
+  mod.s = random(1, 5);
+}
+
+void setMode(ModeEnum newMode)
+{
+  switch(newMode)
+  {
+      case ManualColor:
+        if (mode != ManualColorEditing)
+        {
+          led.s = 255;
+          led.v = 255;
+        }
+        features = ChangeVal | FollowSin;
+        break;
+      case Rainbow:
+        led.s = 255;
+        led.v = 255;
+        features = ChangeHue | Randomize;
+        break;
+      case Crazy:
+        features = ChangeHue | ChangeSat | ChangeVal | FollowSin | Randomize;
+        break;
+  };
+
+  mode = newMode;
+}
+
 
 void setup()
 {
@@ -35,15 +177,58 @@ void setup()
   pinMode(BLUEPIN, OUTPUT);
   pinMode(GREENPIN, OUTPUT);
 
-  check();
-}
+  pinMode(BTNPIN, INPUT_PULLUP);
 
-uint8_t hue = 0;
-uint8_t value = 0;
+  randomSeed(analogRead(0));
+
+  check();
+
+  setMode(ManualColor);
+}
 
 void loop()
 {
-  show(CHSV(hue, 255, value), 5);
-  hue++;
-  value+=10;
+  btn.read();
+
+  if (btn.isPressed())
+  {
+    if (mode == ManualColorEditing || mode == ManualColor && btn.pressedFor(500))
+    {
+      mode = ManualColorEditing;
+      led.v=255;
+      led.h++;
+      show(led, 50);
+    }
+    else
+    {
+      show(CRGB::Red, 5);
+    }
+  }
+  else if (btn.wasReleased())
+  {
+    switch(mode)
+    {
+        case ManualColor:
+          setMode(Rainbow);
+          break;
+        case ManualColorEditing:
+          setMode(ManualColor);
+          break;
+        case Rainbow:
+          setMode(Crazy);
+          break;
+        case Crazy:
+          setMode(ManualColor);
+          break;
+    };
+  }
+  else
+  {
+    if ((mode & Randomize) != 0)
+    {
+      randomize();
+    }
+
+    updateDisplay();
+  }
 }
