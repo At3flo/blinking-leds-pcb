@@ -3,15 +3,26 @@
 #include <FastLED.h>
 #include <Button.h>
 
+/* ========================================================================= */
+
 #define REDPIN 6
 #define BLUEPIN 5
 #define GREENPIN 3
 
-#define BTNPIN 8
+#define CFG_BTN_PIN 8
 
-#define PULLUP true
-#define INVERT true
-#define DEBOUNCEMS 25
+#define CFG_BTN_IS_PULLUP true
+#define CFG_BTN_INVERT true
+#define CFG_BTN_DEBOUNCE_DURATION 25 /* MS */
+
+#define CFG_CHECK_DURATION 250 /* MS */
+
+#define CFG_MIN_ACC 1
+#define CFG_MAX_ACC 20
+#define CFG_MIN_MOD 1
+#define CFG_MAX_MOD 20
+
+/* ========================================================================= */
 
 CHSV acc(10, 10, 10);
 CHSV speed(0, 0, 0);
@@ -45,7 +56,7 @@ enum ModeEnum
 ModeEnum mode = ManualColor;
 FeaturesEnum features = None;
 
-Button btn(BTNPIN, PULLUP, INVERT, DEBOUNCEMS);
+Button btn(CFG_BTN_PIN, CFG_BTN_IS_PULLUP, CFG_BTN_INVERT, CFG_BTN_DEBOUNCE_DURATION);
 
 /**
  * This utility method provide display on leds.
@@ -73,14 +84,13 @@ void show(const CHSV& hsv, uint16_t duration = 0)
   show(rgb, duration);
 }
 
-
 void check()
 {
-  show(CRGB::White, 500);
-  show(CRGB::Red, 500);
-  show(CRGB::Blue, 500);
-  show(CRGB::Green, 500);
-  show(CRGB::Black, 500);
+  show(CRGB::White, CFG_CHECK_DURATION);
+  show(CRGB::Red, CFG_CHECK_DURATION);
+  show(CRGB::Blue, CFG_CHECK_DURATION);
+  show(CRGB::Green, CFG_CHECK_DURATION);
+  show(CRGB::Black, CFG_CHECK_DURATION);
 }
 
 
@@ -137,18 +147,23 @@ void updateDisplay()
 
 void randomize()
 {
-  acc.h = random(5, 15);
-  acc.v = random(5, 15);
-  acc.s = random(5, 15);
-  mod.h = random(1, 5);
-  mod.v = random(1, 5);
-  mod.s = random(1, 5);
+  acc.h = random(CFG_MIN_ACC, CFG_MAX_ACC);
+  acc.v = random(CFG_MIN_ACC, CFG_MAX_ACC);
+  acc.s = random(CFG_MIN_ACC, CFG_MAX_ACC);
+  mod.h = random(CFG_MIN_MOD, CFG_MAX_MOD);
+  mod.v = random(CFG_MIN_MOD, CFG_MAX_MOD);
+  mod.s = random(CFG_MIN_MOD, CFG_MAX_MOD);
 }
 
 void setMode(ModeEnum newMode)
 {
   switch(newMode)
   {
+      case ManualColorEditing:
+        led.s = 255;
+        led.v = 255;
+        features = None;
+        break;
       case ManualColor:
         if (mode != ManualColorEditing)
         {
@@ -177,7 +192,7 @@ void setup()
   pinMode(BLUEPIN, OUTPUT);
   pinMode(GREENPIN, OUTPUT);
 
-  pinMode(BTNPIN, INPUT_PULLUP);
+  pinMode(CFG_BTN_PIN, INPUT_PULLUP);
 
   randomSeed(analogRead(0));
 
@@ -194,10 +209,11 @@ void loop()
   {
     if (mode == ManualColorEditing || mode == ManualColor && btn.pressedFor(500))
     {
-      mode = ManualColorEditing;
-      led.v=255;
+      setMode(ManualColorEditing);
       led.h++;
-      show(led, 50);
+
+      show(CRGB::Black, 5);
+      show(led, 45);
     }
     else
     {
