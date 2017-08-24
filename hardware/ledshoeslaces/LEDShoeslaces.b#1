@@ -160,8 +160,8 @@
 <wire x1="50" y1="0" x2="50" y2="38" width="0.1524" layer="20"/>
 <wire x1="50" y1="38" x2="0" y2="38" width="0.1524" layer="20"/>
 <wire x1="0" y1="38" x2="0" y2="0" width="0.1524" layer="20"/>
-<dimension x1="0" y1="38" x2="0" y2="0" x3="-6" y3="19" textsize="1.778" layer="20"/>
-<dimension x1="0" y1="0" x2="50" y2="0" x3="25" y3="-7" textsize="1.778" layer="20"/>
+<dimension x1="0" y1="38" x2="0" y2="0" x3="-6" y3="19" textsize="1.778" layer="1"/>
+<dimension x1="0" y1="0" x2="50" y2="0" x3="25" y3="-7" textsize="1.778" layer="1"/>
 <text x="0" y="-0.0125" size="0.005" layer="2" font="vector">/home/ioknox/eagle/LEDShoeslaces/A3O5PRO100002-IMG170822 Logo v2.2 300dpi 8Bits squared.bmp</text>
 <text x="0" y="-0.0125" size="0.005" layer="1" font="vector">/home/ioknox/eagle/LEDShoeslaces/A3O5PRO100002-IMG170822 Logo v2.2 300dpi 8Bits squared.bmp</text>
 <rectangle x1="13.384928125" y1="2.082078125" x2="13.589928125" y2="2.087078125" layer="1"/>
