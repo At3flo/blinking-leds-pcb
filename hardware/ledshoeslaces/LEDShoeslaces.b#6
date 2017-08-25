@@ -1133,6 +1133,7 @@
 <rectangle x1="0.14414375" y1="0.178859375" x2="0.149225" y2="0.17928125" layer="1"/>
 <rectangle x1="0.183940625" y1="0.178859375" x2="0.18859375" y2="0.17928125" layer="1"/>
 <text x="0" y="-0.002115625" size="0.000846875" layer="1" font="vector">/ws/ng2017/assets/img/logo-600x600.bmp</text>
+<text x="13" y="3.75" size="0.000846875" layer="1" font="vector">at3flo</text>
 </plain>
 <libraries>
 <library name="SparkFun-Batteries" urn="urn:adsk.eagle:library:508">
@@ -2884,7 +2885,7 @@ design rules under a new name.</description>
 <wire x1="26.817525" y1="29.3003" x2="26.821709375" y2="29.296115625" width="0.508" layer="1"/>
 <wire x1="24.58268125" y1="29.3003" x2="26.817525" y2="29.3003" width="0.508" layer="1"/>
 </signal>
-<signal name="ARED">
+<signal name="ABLUE">
 <contactref element="R1" pad="2"/>
 <wire x1="23.217675" y1="36.904325" x2="24" y2="36.422" width="0.508" layer="1"/>
 <wire x1="23.963025" y1="36.905025" x2="24" y2="36.422" width="0.508" layer="1"/>
@@ -2904,7 +2905,7 @@ design rules under a new name.</description>
 <wire x1="2.64341875" y1="36" x2="3.00575" y2="36.36233125" width="0.8128" layer="1"/>
 <wire x1="3.45621875" y1="36.8128" x2="22.28125" y2="36.8128" width="0.8128" layer="1"/>
 </signal>
-<signal name="ABLU">
+<signal name="ARED">
 <contactref element="R2" pad="2"/>
 <via x="17" y="32.75" extent="1-16" drill="1" diameter="1.9"/>
 <wire x1="17" y1="32.75" x2="17" y2="25.5" width="0.508" layer="16"/>
