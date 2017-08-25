@@ -1133,7 +1133,9 @@
 <rectangle x1="0.14414375" y1="0.178859375" x2="0.149225" y2="0.17928125" layer="1"/>
 <rectangle x1="0.183940625" y1="0.178859375" x2="0.18859375" y2="0.17928125" layer="1"/>
 <text x="0" y="-0.002115625" size="0.000846875" layer="1" font="vector">/ws/ng2017/assets/img/logo-600x600.bmp</text>
-<text x="13" y="3.75" size="0.000846875" layer="1" font="vector">at3flo</text>
+<text x="13.25" y="3.5" size="0.000846875" layer="1" font="vector">at3flo</text>
+<text x="19.25" y="4.5" size="2" layer="1" font="vector" rot="R180">at3flo</text>
+<text x="78" y="14.25" size="0.000846875" layer="1" font="vector">numerik games 2017</text>
 </plain>
 <libraries>
 <library name="SparkFun-Batteries" urn="urn:adsk.eagle:library:508">
@@ -2746,8 +2748,6 @@ design rules under a new name.</description>
 <wire x1="21.676634375" y1="29" x2="23.676634375" y2="27" width="0.508" layer="1"/>
 <wire x1="28" y1="24" x2="27.2513" y2="24" width="0.508" layer="1"/>
 <wire x1="27.2513" y1="24" x2="26.405" y2="24.8463" width="0.508" layer="1"/>
-<wire x1="28.049" y1="13.14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
-<wire x1="31" y1="14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
 <wire x1="31" y1="14" x2="31" y2="21" width="0.508" layer="1"/>
 <wire x1="27.2606" y1="8.2512" x2="29.2512" y2="8.2512" width="0.508" layer="1"/>
 <wire x1="29.2512" y1="8.2512" x2="31" y2="10" width="0.508" layer="1"/>
@@ -2755,6 +2755,16 @@ design rules under a new name.</description>
 <wire x1="25.39761875" y1="27" x2="23.676634375" y2="27" width="0.508" layer="1"/>
 <wire x1="26.405" y1="24.8463" x2="26.405" y2="25.99261875" width="0.508" layer="1"/>
 <wire x1="26.405" y1="25.99261875" x2="25.39761875" y2="27" width="0.508" layer="1"/>
+<polygon width="0.508" layer="1">
+<vertex x="31.75" y="24"/>
+<vertex x="31.5" y="22.75"/>
+<vertex x="30.5" y="22"/>
+<vertex x="31.25" y="20"/>
+<vertex x="36.5" y="25.75"/>
+<vertex x="34" y="26.5"/>
+</polygon>
+<wire x1="28.049" y1="13.14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
+<wire x1="30.14" y1="13.14" x2="31" y2="14" width="0.508" layer="1"/>
 <wire x1="22.46188125" y1="13.75088125" x2="28.049" y2="13.14" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MOSI">
@@ -2778,6 +2788,20 @@ design rules under a new name.</description>
 <wire x1="25.00188125" y1="10.516296875" x2="23.793978125" y2="9.30839375" width="0.508" layer="1"/>
 <wire x1="25.00188125" y1="18.736903125" x2="25.00188125" y2="10.516296875" width="0.508" layer="1"/>
 <wire x1="19" y1="21.04174375" x2="19" y2="25.0575625" width="0.3048" layer="1"/>
+<polygon width="0.508" layer="1">
+<vertex x="20.75" y="28"/>
+<vertex x="19.5" y="28"/>
+<vertex x="18" y="26.5"/>
+<vertex x="18" y="25.5"/>
+<vertex x="19" y="24.5"/>
+<vertex x="19" y="23.5"/>
+<vertex x="21" y="21.5"/>
+<vertex x="21.5" y="21.5"/>
+<vertex x="23.5" y="23.5"/>
+<vertex x="23.5" y="27.25"/>
+<vertex x="23.25" y="27.5"/>
+<vertex x="21.25" y="27.5"/>
+</polygon>
 </signal>
 <signal name="MISO">
 <contactref element="U$2" pad="1"/>
@@ -2800,19 +2824,18 @@ design rules under a new name.</description>
 <wire x1="27.54188125" y1="21.276903125" x2="27.54188125" y2="21.54188125" width="0.508" layer="1"/>
 <wire x1="26.405" y1="31.1543" x2="26.405" y2="33.33755625" width="0.508" layer="1"/>
 <wire x1="26.6620375" y1="33.59459375" x2="26.405" y2="33.33755625" width="0.508" layer="1"/>
-<wire x1="30.151871875" y1="33.7812" x2="31.2188" y2="33.7812" width="0.508" layer="1"/>
-<wire x1="31.2188" y1="33.7812" x2="33.246" y2="31.754" width="0.508" layer="1"/>
-<wire x1="33.246" y1="28.246" x2="30" y2="25" width="0.508" layer="1"/>
+<wire x1="30" y1="25" x2="33.246" y2="28.246" width="0.508" layer="1"/>
 <wire x1="30" y1="25" x2="30" y2="24.559128125" width="0.508" layer="1"/>
 <wire x1="30" y1="24.559128125" x2="29.99199375" y2="24.551121875" width="0.508" layer="1"/>
 <wire x1="29.99199375" y1="24.551121875" x2="29.99199375" y2="23.727015625" width="0.508" layer="1"/>
 <wire x1="29.99199375" y1="23.727015625" x2="27.54188125" y2="21.276903125" width="0.508" layer="1"/>
-<wire x1="33.246" y1="31.754" x2="33.246" y2="28.246" width="0.508" layer="1"/>
 <wire x1="29.15135625" y1="33.7812" x2="29" y2="33.7812" width="0.3048" layer="1"/>
-<wire x1="29.15135625" y1="33.7812" x2="30.151871875" y2="33.7812" width="0.3048" layer="1"/>
+<wire x1="29.965021875" y1="33.7812" x2="29.15135625" y2="33.7812" width="0.3048" layer="1"/>
 <wire x1="29" y1="33.7812" x2="29.15135625" y2="33.7812" width="0.3048" layer="1"/>
 <wire x1="26.84864375" y1="33.7812" x2="26.6620375" y2="33.59459375" width="0.3048" layer="1"/>
 <wire x1="29" y1="33.7812" x2="26.84864375" y2="33.7812" width="0.3048" layer="1"/>
+<wire x1="33.246" y1="28.246" x2="33.246" y2="30.500221875" width="0.508" layer="1"/>
+<wire x1="33.246" y1="30.500221875" x2="29.965021875" y2="33.7812" width="0.508" layer="1"/>
 </signal>
 <signal name="BATS">
 <contactref element="BATT2" pad="2"/>
@@ -2864,9 +2887,15 @@ design rules under a new name.</description>
 <wire x1="35.2664125" y1="28.4" x2="31" y2="24.1335875" width="0.508" layer="1"/>
 <wire x1="28.049" y1="15.451" x2="29.451" y2="15.451" width="0.508" layer="1"/>
 <wire x1="29.451" y1="15.451" x2="29.992" y2="15.992" width="0.508" layer="1"/>
-<wire x1="29.992" y1="21.738121875" x2="29.992" y2="15.992" width="0.508" layer="1"/>
-<wire x1="29.992" y1="21.738121875" x2="31" y2="22.746121875" width="0.508" layer="1"/>
-<wire x1="31" y1="24.1335875" x2="31" y2="22.746121875" width="0.508" layer="1"/>
+<wire x1="31" y1="23.253325" x2="31" y2="24.1335875" width="0.508" layer="1"/>
+<wire x1="29.992" y1="22.245325" x2="31" y2="23.253325" width="0.508" layer="1"/>
+<wire x1="29.992" y1="15.992" x2="29.992" y2="22.245325" width="0.508" layer="1"/>
+<polygon width="0.508" layer="1">
+<vertex x="36.5" y="28.5"/>
+<vertex x="37.5" y="26.5"/>
+<vertex x="39.5" y="26.5"/>
+<vertex x="39.75" y="28.25"/>
+</polygon>
 </signal>
 <signal name="LEDRED">
 <contactref element="U$1" pad="2"/>
