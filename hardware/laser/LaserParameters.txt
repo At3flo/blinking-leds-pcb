@@ -1,0 +1,4 @@
+Puissance : 15%
+Vitesse : 200 mms-1
+Pas du scan : 0.08
+Evtl. : X + Y swing
