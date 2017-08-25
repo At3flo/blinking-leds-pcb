@@ -29,6 +29,12 @@ CHSV speed(0, 0, 0);
 CHSV mod(1, 1, 1);
 CHSV led(0, 255, 255);
 
+bool dir_delay = true;
+uint8_t delay = 0;
+uint8_t acc_delay = 0;
+uint8_t speed_delay = 0;
+uint8_t mod_delay = 0;
+
 bool hdir = true;
 bool vdir = true;
 bool sdir = true;
@@ -125,6 +131,11 @@ void cursor(const uint8_t acc, const uint8_t mod,
 
 void updateDisplay()
 {
+  if ((features & ChangeDelay) != 0)
+  {
+    cursor(acc_delay, mod_delay speed_delay, delay, dir_delay, true);
+  }
+
   show(led, 5);
 
   if ((features & ChangeHue) != 0)
