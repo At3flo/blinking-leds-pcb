@@ -2748,8 +2748,6 @@ design rules under a new name.</description>
 <wire x1="21.676634375" y1="29" x2="23.676634375" y2="27" width="0.508" layer="1"/>
 <wire x1="28" y1="24" x2="27.2513" y2="24" width="0.508" layer="1"/>
 <wire x1="27.2513" y1="24" x2="26.405" y2="24.8463" width="0.508" layer="1"/>
-<wire x1="28.049" y1="13.14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
-<wire x1="31" y1="14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
 <wire x1="31" y1="14" x2="31" y2="21" width="0.508" layer="1"/>
 <wire x1="27.2606" y1="8.2512" x2="29.2512" y2="8.2512" width="0.508" layer="1"/>
 <wire x1="29.2512" y1="8.2512" x2="31" y2="10" width="0.508" layer="1"/>
@@ -2765,6 +2763,8 @@ design rules under a new name.</description>
 <vertex x="36.5" y="25.75"/>
 <vertex x="34" y="26.5"/>
 </polygon>
+<wire x1="28.049" y1="13.14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
+<wire x1="30.14" y1="13.14" x2="31" y2="14" width="0.508" layer="1"/>
 <wire x1="22.46188125" y1="13.75088125" x2="28.049" y2="13.14" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MOSI">

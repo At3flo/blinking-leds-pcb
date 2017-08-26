@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mm"/>
+<grid distance="1" unitdist="mic" unit="mic" style="lines" multiple="1" display="no" altdistance="5" altunitdist="mil" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
@@ -1133,8 +1133,6 @@
 <rectangle x1="0.14414375" y1="0.178859375" x2="0.149225" y2="0.17928125" layer="1"/>
 <rectangle x1="0.183940625" y1="0.178859375" x2="0.18859375" y2="0.17928125" layer="1"/>
 <text x="0" y="-0.002115625" size="0.000846875" layer="1" font="vector">/ws/ng2017/assets/img/logo-600x600.bmp</text>
-<text x="13.25" y="3.5" size="0.000846875" layer="1" font="vector">at3flo</text>
-<text x="19.25" y="4.5" size="2" layer="1" font="vector" rot="R180">at3flo</text>
 <text x="78" y="14.25" size="0.000846875" layer="1" font="vector">numerik games 2017</text>
 </plain>
 <libraries>
@@ -2748,8 +2746,6 @@ design rules under a new name.</description>
 <wire x1="21.676634375" y1="29" x2="23.676634375" y2="27" width="0.508" layer="1"/>
 <wire x1="28" y1="24" x2="27.2513" y2="24" width="0.508" layer="1"/>
 <wire x1="27.2513" y1="24" x2="26.405" y2="24.8463" width="0.508" layer="1"/>
-<wire x1="28.049" y1="13.14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
-<wire x1="31" y1="14" x2="30.14" y2="13.14" width="0.508" layer="1"/>
 <wire x1="31" y1="14" x2="31" y2="21" width="0.508" layer="1"/>
 <wire x1="27.2606" y1="8.2512" x2="29.2512" y2="8.2512" width="0.508" layer="1"/>
 <wire x1="29.2512" y1="8.2512" x2="31" y2="10" width="0.508" layer="1"/>
@@ -2765,6 +2761,8 @@ design rules under a new name.</description>
 <vertex x="36.5" y="25.75"/>
 <vertex x="34" y="26.5"/>
 </polygon>
+<wire x1="28.049" y1="13.14" x2="30.14" y2="13.14" width="0.8128" layer="1"/>
+<wire x1="30.14" y1="13.14" x2="31" y2="14" width="0.8128" layer="1"/>
 <wire x1="22.46188125" y1="13.75088125" x2="28.049" y2="13.14" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MOSI">
@@ -2891,10 +2889,10 @@ design rules under a new name.</description>
 <wire x1="29.992" y1="22.245325" x2="31" y2="23.253325" width="0.508" layer="1"/>
 <wire x1="29.992" y1="15.992" x2="29.992" y2="22.245325" width="0.508" layer="1"/>
 <polygon width="0.508" layer="1">
-<vertex x="36.5" y="28.5"/>
-<vertex x="37.5" y="26.5"/>
-<vertex x="39.5" y="26.5"/>
-<vertex x="39.75" y="28.25"/>
+<vertex x="34.548" y="28.429"/>
+<vertex x="38.238" y="26.13"/>
+<vertex x="43.311" y="27.409"/>
+<vertex x="42.418" y="28.612"/>
 </polygon>
 </signal>
 <signal name="LEDRED">

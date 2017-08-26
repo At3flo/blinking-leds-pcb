@@ -252,12 +252,10 @@
 </package>
 <package name="LEDRGB">
 <description>LEDRGB</description>
-<pad name="4" x="3.81" y="0" drill="1" shape="long" rot="R90"/>
-<pad name="3" x="1.27" y="0" drill="1" shape="long" rot="R90"/>
-<pad name="2" x="-1.27" y="0" drill="1" shape="long" rot="R90"/>
-<pad name="1" x="-3.81" y="0" drill="1" shape="long" rot="R90"/>
-<circle x="0" y="0" radius="2.83980625" width="0.127" layer="21"/>
-<wire x1="-2.54" y1="1.27" x2="-2.54" y2="-1.27" width="0.127" layer="21"/>
+<pad name="4" x="3.5" y="0" drill="1" shape="long" rot="R90"/>
+<pad name="3" x="1" y="0" drill="1" shape="long" rot="R90"/>
+<pad name="2" x="-1.5" y="0" drill="1" shape="long" rot="R90"/>
+<pad name="1" x="-4" y="0" drill="1" shape="long" rot="R90"/>
 </package>
 </packages>
 <symbols>
@@ -335,10 +333,10 @@
 <wire x1="0" y1="-5.08" x2="7.62" y2="-5.08" width="0.254" layer="94"/>
 <wire x1="7.62" y1="-5.08" x2="7.62" y2="-2.54" width="0.254" layer="94"/>
 <wire x1="0" y1="-2.54" x2="0" y2="-5.08" width="0.254" layer="94"/>
+<pin name="RED" x="-7.62" y="7.62" length="middle" rot="R270"/>
 <pin name="GND" x="0" y="-10.16" length="middle" rot="R90"/>
-<pin name="ABLUE" x="7.62" y="7.62" length="middle" rot="R270"/>
-<pin name="AGREEN" x="0" y="7.62" length="middle" rot="R270"/>
-<pin name="ARED" x="-7.62" y="7.62" length="middle" rot="R270"/>
+<pin name="GREEN" x="0" y="7.62" length="middle" rot="R270"/>
+<pin name="BLUE" x="7.62" y="7.62" length="middle" rot="R270"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -404,10 +402,10 @@
 <devices>
 <device name="" package="LEDRGB">
 <connects>
-<connect gate="G$1" pin="ABLUE" pad="4"/>
-<connect gate="G$1" pin="AGREEN" pad="3"/>
-<connect gate="G$1" pin="ARED" pad="1"/>
+<connect gate="G$1" pin="BLUE" pad="4"/>
 <connect gate="G$1" pin="GND" pad="2"/>
+<connect gate="G$1" pin="GREEN" pad="3"/>
+<connect gate="G$1" pin="RED" pad="1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -13847,8 +13845,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instance part="R3" gate="G$1" x="101.6" y="104.14"/>
 <instance part="C1" gate="G$1" x="48.26" y="96.52"/>
 <instance part="C2" gate="G$1" x="27.94" y="96.52"/>
-<instance part="U$3" gate="G$1" x="154.94" y="124.46" rot="R90"/>
-<instance part="U$4" gate="G$1" x="154.94" y="88.9" rot="R90"/>
+<instance part="U$3" gate="G$1" x="154.94" y="129.54" rot="R90"/>
+<instance part="U$4" gate="G$1" x="154.94" y="86.36" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -13887,14 +13885,17 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="22.86" y1="91.44" x2="22.86" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="165.1" y1="88.9" x2="170.18" y2="88.9" width="0.1524" layer="91"/>
-<pinref part="GND5" gate="1" pin="GND"/>
 <pinref part="U$4" gate="G$1" pin="GND"/>
+<wire x1="165.1" y1="86.36" x2="165.1" y2="91.44" width="0.1524" layer="91"/>
+<pinref part="GND5" gate="1" pin="GND"/>
+<wire x1="165.1" y1="91.44" x2="170.18" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="91.44" x2="170.18" y2="88.9" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="165.1" y1="124.46" x2="170.18" y2="124.46" width="0.1524" layer="91"/>
-<pinref part="GND7" gate="1" pin="GND"/>
 <pinref part="U$3" gate="G$1" pin="GND"/>
+<pinref part="GND7" gate="1" pin="GND"/>
+<wire x1="165.1" y1="129.54" x2="170.18" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="170.18" y1="129.54" x2="170.18" y2="124.46" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
@@ -14042,33 +14043,33 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <segment>
 <wire x1="139.7" y1="111.76" x2="106.68" y2="111.76" width="0.1524" layer="91"/>
 <label x="114.3" y="111.76" size="1.778" layer="95" rot="R90"/>
-<wire x1="139.7" y1="111.76" x2="139.7" y2="91.44" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="91.44" x2="142.24" y2="91.44" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="127" x2="142.24" y2="127" width="0.1524" layer="91"/>
-<wire x1="139.7" y1="111.76" x2="139.7" y2="127" width="0.1524" layer="91"/>
+<wire x1="139.7" y1="111.76" x2="139.7" y2="78.74" width="0.1524" layer="91"/>
+<wire x1="139.7" y1="111.76" x2="139.7" y2="129.54" width="0.1524" layer="91"/>
 <junction x="139.7" y="111.76"/>
 <pinref part="R1" gate="G$1" pin="2"/>
 <wire x1="106.68" y1="111.76" x2="106.68" y2="114.3" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="ABLUE"/>
-<wire x1="147.32" y1="132.08" x2="142.24" y2="132.08" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="132.08" x2="142.24" y2="127" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="ABLUE"/>
-<wire x1="147.32" y1="96.52" x2="142.24" y2="96.52" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="96.52" x2="142.24" y2="91.44" width="0.1524" layer="91"/>
+<wire x1="139.7" y1="129.54" x2="142.24" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="129.54" x2="142.24" y2="121.92" width="0.1524" layer="91"/>
+<pinref part="U$3" gate="G$1" pin="RED"/>
+<wire x1="142.24" y1="121.92" x2="147.32" y2="121.92" width="0.1524" layer="91"/>
+<pinref part="U$4" gate="G$1" pin="RED"/>
+<wire x1="139.7" y1="78.74" x2="147.32" y2="78.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="ABLU" class="0">
 <segment>
-<wire x1="134.62" y1="124.46" x2="147.32" y2="124.46" width="0.1524" layer="91"/>
 <wire x1="134.62" y1="109.22" x2="106.68" y2="109.22" width="0.1524" layer="91"/>
 <wire x1="134.62" y1="109.22" x2="134.62" y2="88.9" width="0.1524" layer="91"/>
 <label x="99.06" y="109.22" size="1.778" layer="95"/>
-<wire x1="134.62" y1="88.9" x2="147.32" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="134.62" y1="124.46" x2="134.62" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="134.62" y1="137.16" x2="134.62" y2="109.22" width="0.1524" layer="91"/>
 <junction x="134.62" y="109.22"/>
 <pinref part="R2" gate="G$1" pin="2"/>
-<pinref part="U$3" gate="G$1" pin="AGREEN"/>
-<pinref part="U$4" gate="G$1" pin="AGREEN"/>
+<wire x1="134.62" y1="88.9" x2="142.24" y2="88.9" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="88.9" x2="142.24" y2="93.98" width="0.1524" layer="91"/>
+<pinref part="U$4" gate="G$1" pin="BLUE"/>
+<wire x1="142.24" y1="93.98" x2="147.32" y2="93.98" width="0.1524" layer="91"/>
+<pinref part="U$3" gate="G$1" pin="BLUE"/>
+<wire x1="134.62" y1="137.16" x2="147.32" y2="137.16" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="AGRN" class="0">
@@ -14076,18 +14077,18 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="129.54" y1="106.68" x2="106.68" y2="106.68" width="0.1524" layer="91"/>
 <wire x1="129.54" y1="106.68" x2="129.54" y2="86.36" width="0.1524" layer="91"/>
 <label x="114.3" y="93.98" size="1.778" layer="95" rot="R90"/>
-<wire x1="129.54" y1="86.36" x2="142.24" y2="86.36" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="121.92" x2="129.54" y2="121.92" width="0.1524" layer="91"/>
-<wire x1="129.54" y1="121.92" x2="129.54" y2="106.68" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="129.54" x2="129.54" y2="106.68" width="0.1524" layer="91"/>
 <junction x="129.54" y="106.68"/>
 <pinref part="R3" gate="G$1" pin="2"/>
 <wire x1="106.68" y1="106.68" x2="106.68" y2="104.14" width="0.1524" layer="91"/>
-<pinref part="U$3" gate="G$1" pin="ARED"/>
-<wire x1="147.32" y1="116.84" x2="142.24" y2="116.84" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="116.84" x2="142.24" y2="121.92" width="0.1524" layer="91"/>
-<pinref part="U$4" gate="G$1" pin="ARED"/>
-<wire x1="147.32" y1="81.28" x2="142.24" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="81.28" x2="142.24" y2="86.36" width="0.1524" layer="91"/>
+<pinref part="U$4" gate="G$1" pin="GREEN"/>
+<wire x1="129.54" y1="86.36" x2="147.32" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="129.54" x2="137.16" y2="129.54" width="0.1524" layer="91"/>
+<wire x1="137.16" y1="129.54" x2="137.16" y2="132.08" width="0.1524" layer="91"/>
+<wire x1="137.16" y1="132.08" x2="144.78" y2="132.08" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="132.08" x2="144.78" y2="129.54" width="0.1524" layer="91"/>
+<pinref part="U$3" gate="G$1" pin="GREEN"/>
+<wire x1="144.78" y1="129.54" x2="147.32" y2="129.54" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
