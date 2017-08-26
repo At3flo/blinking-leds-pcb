@@ -1,5 +1,5 @@
-Puissance : 15%
+Puissance : 16%
 Vitesse : 200 mms-1
 Pas du scan : 0.08
 Evtl. : X + Y swing
-Dimensions : 137mm x 102mm
+Dimensions cadre : 138mm x 102mm
