@@ -14039,7 +14039,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <junction x="22.86" y="99.06"/>
 </segment>
 </net>
-<net name="ARED" class="0">
+<net name="ABLUE" class="0">
 <segment>
 <wire x1="139.7" y1="111.76" x2="106.68" y2="111.76" width="0.1524" layer="91"/>
 <label x="114.3" y="111.76" size="1.778" layer="95" rot="R90"/>
@@ -14054,7 +14054,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <junction x="139.7" y="111.76"/>
 </segment>
 </net>
-<net name="ABLU" class="0">
+<net name="ARED" class="0">
 <segment>
 <wire x1="134.62" y1="109.22" x2="106.68" y2="109.22" width="0.1524" layer="91"/>
 <wire x1="134.62" y1="109.22" x2="134.62" y2="78.74" width="0.1524" layer="91"/>

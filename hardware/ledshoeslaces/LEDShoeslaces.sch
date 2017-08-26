@@ -252,10 +252,10 @@
 </package>
 <package name="LEDRGB">
 <description>LEDRGB</description>
-<pad name="4" x="3.5" y="0" drill="1" rot="R90"/>
-<pad name="3" x="1" y="0" drill="1" rot="R90"/>
-<pad name="2" x="-1.5" y="0" drill="1" shape="square" rot="R90"/>
-<pad name="1" x="-4" y="0" drill="1" rot="R90"/>
+<pad name="4" x="3.5" y="0" drill="1" diameter="1.6764" rot="R90"/>
+<pad name="3" x="1" y="0" drill="1" diameter="1.6764" rot="R90"/>
+<pad name="2" x="-1.5" y="0" drill="1" diameter="1.6764" shape="square" rot="R90"/>
+<pad name="1" x="-4" y="0" drill="1" diameter="1.6764" rot="R90"/>
 </package>
 </packages>
 <symbols>

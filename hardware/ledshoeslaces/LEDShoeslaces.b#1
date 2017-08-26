@@ -2701,13 +2701,6 @@ design rules under a new name.</description>
 <contactref element="U$4" pad="2"/>
 <contactref element="U$3" pad="2"/>
 <contactref element="S1" pad="3"/>
-<wire x1="34.5" y1="33.75" x2="47.75" y2="31" width="0" layer="19" extent="1-1"/>
-<wire x1="15.5543" y1="31.1543" x2="13.5" y2="33.75" width="0" layer="19" extent="1-1"/>
-<wire x1="29.05" y1="28" x2="22.605" y2="31.1543" width="0" layer="19" extent="1-1"/>
-<wire x1="27.54188125" y1="18.736903125" x2="29.05" y2="28" width="0" layer="19" extent="1-1"/>
-<wire x1="27.2606" y1="8.2512" x2="27.70810625" y2="10.829" width="0" layer="19" extent="1-1"/>
-<wire x1="2.25" y1="31" x2="13.3" y2="29" width="0" layer="19" extent="1-1"/>
-<wire x1="8" y1="16" x2="13.3" y2="29" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="VCC">
 <contactref element="U$1" pad="8"/>
@@ -2754,8 +2747,6 @@ design rules under a new name.</description>
 <wire x1="28" y1="24" x2="27.2513" y2="24" width="0.508" layer="1"/>
 <wire x1="27.2513" y1="24" x2="26.405" y2="24.8463" width="0.508" layer="1"/>
 <wire x1="31" y1="14" x2="31" y2="21" width="0.508" layer="1"/>
-<wire x1="29.2512" y1="8.2512" x2="31" y2="10" width="0.508" layer="1"/>
-<wire x1="31" y1="10" x2="31" y2="14" width="0.508" layer="1"/>
 <wire x1="25.39761875" y1="27" x2="23.676634375" y2="27" width="0.508" layer="1"/>
 <wire x1="26.405" y1="24.8463" x2="26.405" y2="25.99261875" width="0.508" layer="1"/>
 <wire x1="26.405" y1="25.99261875" x2="25.39761875" y2="27" width="0.508" layer="1"/>
