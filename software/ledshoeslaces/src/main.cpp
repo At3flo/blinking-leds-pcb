@@ -1,261 +1,259 @@
-
 #include <Arduino.h>
-#include <FastLED.h>
-#include <Button.h>
 
-/* ========================================================================= */
+#include <avr/interrupt.h>
+#include <avr/sleep.h>
 
-#define REDPIN 6
-#define BLUEPIN 5
-#define GREENPIN 3
-
-#define CFG_BTN_PIN 8
-
-#define CFG_BTN_IS_PULLUP true
-#define CFG_BTN_INVERT true
-#define CFG_BTN_DEBOUNCE_DURATION 25 /* MS */
-
-#define CFG_CHECK_DURATION 250 /* MS */
-
-#define CFG_MIN_ACC 1
-#define CFG_MAX_ACC 20
-#define CFG_MIN_MOD 1
-#define CFG_MAX_MOD 20
-
-/* ========================================================================= */
-
-CHSV acc(10, 10, 10);
-CHSV speed(0, 0, 0);
-CHSV mod(1, 1, 1);
-CHSV led(0, 255, 255);
-
-bool dir_delay = true;
-uint8_t delay = 0;
-uint8_t acc_delay = 0;
-uint8_t speed_delay = 0;
-uint8_t mod_delay = 0;
-
-bool hdir = true;
-bool vdir = true;
-bool sdir = true;
-
-uint8_t count = 0;
-
-enum FeaturesEnum
+enum ButtonStateEnum : uint8_t
 {
-  None = 0,
-  ChangeHue = 1,
-  ChangeSat = 2,
-  ChangeVal = 4,
-  FollowSin = 8,
-  Randomize = 16
+  Unknown,
+  Up,
+  Falling,
+  Down,
+  Rising
 };
 
-enum ModeEnum
+enum StateEnum : uint8_t
 {
-    ManualColor = 0,
-    ManualColorEditing = 1,
-    Rainbow = 2,
-    Crazy = 3
+  Sleep,
+  Solid,
+  FadingInc,
+  FadingDec,
+  Rainbow
 };
 
-ModeEnum mode = ManualColor;
-FeaturesEnum features = None;
+#define CFG_RED_PIN 1
+#define CFG_BLUE_PIN 3
+#define CFG_GREEN_PIN 4
+#define CFG_BTN_PIN 0
+#define STEP 10U
 
-Button btn(CFG_BTN_PIN, CFG_BTN_IS_PULLUP, CFG_BTN_INVERT, CFG_BTN_DEBOUNCE_DURATION);
+StateEnum state = FadingInc;
 
-/**
- * This utility method provide display on leds.
- */
+uint8_t hue = 0;
+uint8_t value = 0;
 
-void show(const CRGB& rgb, uint16_t duration = 0)
-{
-  analogWrite(REDPIN, rgb.r);
-  analogWrite(GREENPIN, rgb.g);
-  analogWrite(BLUEPIN, rgb.b);
+ButtonStateEnum buttonState = Unknown;
+uint32_t buttonChanged = 0;
+uint32_t timeRef = 0;
 
-  if (duration >= 0)
-  {
-    delay(duration);
-  }
+
+//This runs each time the watch dog wakes us up from sleep
+ISR(WDT_vect) {
+  //Don't do anything. This is just here so that we wake up.
 }
 
+//Sets the watchdog timer to wake us up, but not reset
+//0=16ms, 1=32ms, 2=64ms, 3=128ms, 4=250ms, 5=500ms
+//6=1sec, 7=2sec, 8=4sec, 9=8sec
+//From: http://interface.khm.de/index.php/lab/experiments/sleep_watchdog_battery/
+void setup_watchdog(int timerPrescaler) {
 
-void show(const CHSV& hsv, uint16_t duration = 0)
-{
-  CRGB rgb;
+  if (timerPrescaler > 9 ) timerPrescaler = 9; //Limit incoming amount to legal settings
 
-  hsv2rgb_rainbow(hsv, rgb);
+  byte bb = timerPrescaler & 7;
+  if (timerPrescaler > 7) bb |= (1<<5); //Set the special 5th bit if necessary
 
-  show(rgb, duration);
+  //This order of commands is important and cannot be combined
+  MCUSR &= ~(1<<WDRF); //Clear the watch dog reset
+  WDTCR |= (1<<WDCE) | (1<<WDE); //Set WD_change enable, set WD enable
+  WDTCR = bb; //Set new watchdog timeout value
+  WDTCR |= _BV(WDIE); //Set the interrupt enable, this will keep unit from resetting after each int
 }
-
-void check()
-{
-  show(CRGB::White, CFG_CHECK_DURATION);
-  show(CRGB::Red, CFG_CHECK_DURATION);
-  show(CRGB::Blue, CFG_CHECK_DURATION);
-  show(CRGB::Green, CFG_CHECK_DURATION);
-  show(CRGB::Black, CFG_CHECK_DURATION);
-}
-
-
-void cursor(const uint8_t acc, const uint8_t mod,
-  uint8_t &speed, uint8_t &position, bool &dir, bool reverse)
-{
-  if ((count % mod) == 0)
-  {
-    uint8_t delta = 1;
-
-    if ((features & FollowSin) != 0)
-    {
-      delta = sin((float)map(speed, 0, 255, 0, 360) * M_PI / 180.0) * acc;
-      speed++;
-    }
-
-    if (reverse && (position + delta) < position)
-    {
-      dir = !dir;
-    }
-
-    if (dir)
-    {
-      position += delta;
-    }
-    else
-    {
-      position -= delta;
-    }
-  }
-}
-
-void updateDisplay()
-{
-  if ((features & ChangeDelay) != 0)
-  {
-    cursor(acc_delay, mod_delay speed_delay, delay, dir_delay, true);
-  }
-
-  show(led, 5);
-
-  if ((features & ChangeHue) != 0)
-  {
-    cursor(acc.h, mod.h, speed.h, led.h, hdir, false);
-  }
-
-  if ((features & ChangeVal) != 0)
-  {
-    cursor(acc.v, mod.v, speed.v, led.v, vdir, true);
-  }
-
-  if ((features & ChangeSat) != 0)
-  {
-    cursor(acc.s, mod.s, speed.s, led.s, sdir, true);
-  }
-
-  count++;
-}
-
-void randomize()
-{
-  acc.h = random(CFG_MIN_ACC, CFG_MAX_ACC);
-  acc.v = random(CFG_MIN_ACC, CFG_MAX_ACC);
-  acc.s = random(CFG_MIN_ACC, CFG_MAX_ACC);
-  mod.h = random(CFG_MIN_MOD, CFG_MAX_MOD);
-  mod.v = random(CFG_MIN_MOD, CFG_MAX_MOD);
-  mod.s = random(CFG_MIN_MOD, CFG_MAX_MOD);
-}
-
-void setMode(ModeEnum newMode)
-{
-  switch(newMode)
-  {
-      case ManualColorEditing:
-        led.s = 255;
-        led.v = 255;
-        features = None;
-        break;
-      case ManualColor:
-        if (mode != ManualColorEditing)
-        {
-          led.s = 255;
-          led.v = 255;
-        }
-        features = ChangeVal | FollowSin;
-        break;
-      case Rainbow:
-        led.s = 255;
-        led.v = 255;
-        features = ChangeHue | Randomize;
-        break;
-      case Crazy:
-        features = ChangeHue | ChangeSat | ChangeVal | FollowSin | Randomize;
-        break;
-  };
-
-  mode = newMode;
-}
-
 
 void setup()
 {
-  pinMode(REDPIN, OUTPUT);
-  pinMode(BLUEPIN, OUTPUT);
-  pinMode(GREENPIN, OUTPUT);
+    pinMode(CFG_RED_PIN, OUTPUT);
+    pinMode(CFG_BLUE_PIN, OUTPUT);
+    pinMode(CFG_GREEN_PIN, OUTPUT);
+    pinMode(CFG_BTN_PIN, INPUT_PULLUP);
 
-  pinMode(CFG_BTN_PIN, INPUT_PULLUP);
+    ADCSRA &= ~_BV(ADEN);  // switch ADC OFF
+    ACSR  |= _BV(ACD);     // switch Analog Compartaror OFF
 
-  randomSeed(analogRead(0));
+    //Power down various bits of hardware to lower power usage
+    set_sleep_mode(SLEEP_MODE_PWR_DOWN); //Power down everything, wake up from WDT
+    sleep_enable();
 
-  check();
-
-  setMode(ManualColor);
+    timeRef = millis();
 }
+
+void display()
+{
+  float r, g, b;
+  float h = ((float)hue) / 255.0f;
+  float v = ((float)value) / 255.0f;
+  float s = 1.0f;
+
+  int i = int(h * 6);
+  float f = h * 6.0f - i;
+  float p = v * (1.0f - s);
+  float q = v * (1.0f - f * s);
+  float t = v * (1.0f - (1.0f - f) * s);
+
+  switch(i % 6)
+  {
+      case 0: r = v, g = t, b = p; break;
+      case 1: r = q, g = v, b = p; break;
+      case 2: r = p, g = v, b = t; break;
+      case 3: r = p, g = q, b = v; break;
+      case 4: r = t, g = p, b = v; break;
+      case 5: r = v, g = p, b = q; break;
+  }
+
+  analogWrite(CFG_BLUE_PIN, (uint8_t)(b * 255.0));
+  analogWrite(CFG_GREEN_PIN, (uint8_t)(g * 255.0));
+  analogWrite(CFG_RED_PIN, (uint8_t)(r * 255));
+}
+
+void sleep()
+{
+  ADCSRA &= ~(1<<ADEN); //Disable ADC, saves ~230uA
+  setup_watchdog(6); //Setup watchdog to go off after 1sec
+  sleep_mode(); //Go to sleep! Wake up 1sec later
+  //Check for water
+  ADCSRA |= (1<<ADEN); //Enable ADC
+}
+
+void button()
+{
+  uint32_t now = millis();
+
+  if ((now - buttonChanged) < 25)
+  {
+    return;
+  }
+
+  uint8_t state = digitalRead(CFG_BTN_PIN);
+  ButtonStateEnum origState = buttonState;
+
+  switch (buttonState)
+  {
+    case Unknown:
+      buttonState = state == HIGH ? Up : Down;
+      break;
+    case Up:
+      if (state == LOW)
+      {
+        buttonState = Falling;
+      }
+      break;
+    case Down:
+      if (state == HIGH)
+      {
+        buttonState = Rising;
+      }
+      break;
+    case Falling:
+      buttonState = Down;
+      break;
+    case Rising:
+      buttonState = Up;
+      break;
+  }
+
+  if (buttonState != origState)
+  {
+    buttonChanged = now;
+  }
+}
+
+void waitButton(ButtonStateEnum state)
+{
+  while (state != buttonState)
+  {
+    button();
+  }
+}
+
 
 void loop()
 {
-  btn.read();
+  uint32_t now = millis();
 
-  if (btn.isPressed())
-  {
-    if (mode == ManualColorEditing || mode == ManualColor && btn.pressedFor(500))
-    {
-      setMode(ManualColorEditing);
-      led.h++;
+  button();
 
-      show(CRGB::Black, 5);
-      show(led, 45);
-    }
-    else
-    {
-      show(CRGB::Red, 5);
-    }
-  }
-  else if (btn.wasReleased())
+  switch (state)
   {
-    switch(mode)
-    {
-        case ManualColor:
-          setMode(Rainbow);
-          break;
-        case ManualColorEditing:
-          setMode(ManualColor);
-          break;
-        case Rainbow:
-          setMode(Crazy);
-          break;
-        case Crazy:
-          setMode(ManualColor);
-          break;
-    };
+    case Sleep:
+      if (digitalRead(CFG_BTN_PIN) == LOW)
+      {
+        hue = 0;
+        value = 255;
+        state = Solid;
+        display();
+        waitButton(Up);
+      }
+      else
+      {
+        value = 0;
+        buttonState = Unknown;
+        display();
+        sleep();
+      }
+      break;
+    case Solid:
+      if (buttonState == Falling)
+      {
+        timeRef = now;
+      }
+      else if (buttonState == Down)
+      {
+        if ((now - timeRef) > 500)
+        {
+          hue++;
+        }
+      }
+      else if (buttonState == Rising)
+      {
+        if ((now - timeRef) <= 500)
+        {
+          state = FadingDec;
+        }
+        waitButton(Up);
+      }
+      break;
+    case FadingInc:
+      if (value >= (0xFF - STEP))
+      {
+        state = FadingDec;
+        value = 255;
+      }
+      else
+      {
+        value += STEP;
+      }
+      if (buttonState == Rising)
+      {
+        state = Rainbow;
+        waitButton(Up);
+      }
+      break;
+    case FadingDec:
+      if (value <= STEP)
+      {
+        state = FadingInc;
+        value = 0;
+      }
+      else
+      {
+        value -= STEP;
+      }
+      if (buttonState == Rising)
+      {
+        state = Rainbow;
+        waitButton(Up);
+      }
+      break;
+    case Rainbow:
+      hue++;
+      if (buttonState == Rising)
+      {
+        state = Sleep;
+        waitButton(Up);
+      }
+      break;
   }
-  else
-  {
-    if ((mode & Randomize) != 0)
-    {
-      randomize();
-    }
 
-    updateDisplay();
-  }
+  display();
+  delay(5);
 }

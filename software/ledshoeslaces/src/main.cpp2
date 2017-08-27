@@ -1,0 +1,334 @@
+
+#define ATTINY_CORE 0
+
+#include <Arduino.h>
+#include <RGBConverter.h>
+#include <Button.h>
+
+/* ========================================================================= */
+
+#define REDPIN 6
+#define BLUEPIN 5
+#define GREENPIN 3
+
+#define CFG_BTN_PIN 8
+
+#define CFG_BTN_IS_PULLUP true
+#define CFG_BTN_INVERT true
+#define CFG_BTN_DEBOUNCE_DURATION 25 /* MS */
+
+#define CFG_CHECK_DURATION 250 /* MS */
+
+#define CFG_MIN_SPEED 0
+#define CFG_MAX_SPEED 255
+#define CFG_MIN_ACC 1
+#define CFG_MAX_ACC 20
+#define CFG_MIN_MOD 1
+#define CFG_MAX_MOD 20
+
+/* ========================================================================= */
+
+struct CHSV
+{
+public:
+    uint8_t h;
+    uint8_t s;
+    uint8_t v;
+
+    CHSV(uint8_t _h, uint8_t _s, uint8_t _v)
+    {
+      h = _h;
+      s = _s;
+      v = _v;
+    }
+};
+
+struct CRGB
+{
+public:
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+
+    CRGB()
+    {
+
+    }
+
+    CRGB(uint8_t _r, uint8_t _g, uint8_t _b)
+    {
+      r = _r;
+      g = _g;
+      b = _b;
+    }
+};
+
+#define White CRGB(255, 255, 255)
+#define Red CRGB(255, 0, 0)
+#define Green CRGB(0, 255, 0)
+#define Blue CRGB(0, 0, 255)
+#define Black CRGB(0, 0, 0)
+
+
+void hsv2rgb_rainbow(const CHSV &from, CRGB to)
+{
+  byte rgb[3];
+  RGBConverter tool;
+
+  tool.hsvToRgb(
+    map(from.h, 0, 255, 0, 1),
+    map(from.s, 0, 255, 0, 1),
+    map(from.v, 0, 255, 0, 1),
+    rgb
+  );
+
+  to.r = rgb[0];
+  to.g = rgb[1];
+  to.b = rgb[2];
+}
+
+
+CHSV acc(10, 10, 10);
+CHSV speed(0, 0, 0);
+CHSV mod(1, 1, 1);
+CHSV led(0, 255, 255);
+
+bool dir_delay = true;
+uint8_t pos_delay = 5;
+uint8_t acc_delay = 1;
+uint8_t speed_delay = 0;
+uint8_t mod_delay = 1;
+
+bool hdir = true;
+bool vdir = true;
+bool sdir = true;
+
+uint8_t count = 0;
+
+enum FeaturesEnum
+{
+  None = 0,
+  ChangeHue = 1,
+  ChangeSat = 2,
+  ChangeVal = 4,
+  FollowSin = 8,
+  Randomize = 16,
+  ChangeDelay = 32
+};
+
+enum ModeEnum
+{
+    ManualColor = 0,
+    ManualColorEditing = 1,
+    Rainbow = 2,
+    Crazy = 3
+};
+
+ModeEnum mode = ManualColor;
+FeaturesEnum features = None;
+
+Button btn(CFG_BTN_PIN, CFG_BTN_IS_PULLUP, CFG_BTN_INVERT,
+  CFG_BTN_DEBOUNCE_DURATION);
+
+/**
+ * This utility method provide display on leds.
+ */
+
+void show(const CRGB& rgb, uint16_t duration = 0)
+{
+  analogWrite(REDPIN, rgb.r);
+  analogWrite(GREENPIN, rgb.g);
+  analogWrite(BLUEPIN, rgb.b);
+
+  if (duration >= 0)
+  {
+    delay(duration);
+  }
+}
+
+
+void show(const CHSV& hsv, uint16_t duration = 0)
+{
+  CRGB rgb;
+
+  hsv2rgb_rainbow(hsv, rgb);
+
+  show(rgb, duration);
+}
+
+void check()
+{
+  show(White, CFG_CHECK_DURATION);
+  show(Red, CFG_CHECK_DURATION);
+  show(Blue, CFG_CHECK_DURATION);
+  show(Green, CFG_CHECK_DURATION);
+  show(Black, CFG_CHECK_DURATION);
+}
+
+
+void cursor(const uint8_t acc, const uint8_t mod,
+  uint8_t &speed, uint8_t &position, bool &dir, bool reverse)
+{
+  if ((count % mod) == 0)
+  {
+    uint8_t delta = 1;
+
+    if ((features & FollowSin) != 0)
+    {
+      delta = sin((float)map(speed, 0, 255, 0, 360) * M_PI / 180.0) * acc;
+      speed++;
+    }
+
+    if (reverse && (position + delta) < position)
+    {
+      dir = !dir;
+    }
+
+    if (dir)
+    {
+      position += delta;
+    }
+    else
+    {
+      position -= delta;
+    }
+  }
+}
+
+void updateDisplay()
+{
+  if ((features & ChangeHue) != 0)
+  {
+    cursor(acc.h, mod.h, speed.h, led.h, hdir, false);
+  }
+
+  if ((features & ChangeVal) != 0)
+  {
+    cursor(acc.v, mod.v, speed.v, led.v, vdir, true);
+  }
+
+  if ((features & ChangeSat) != 0)
+  {
+    cursor(acc.s, mod.s, speed.s, led.s, sdir, true);
+  }
+
+  if ((features & ChangeDelay) != 0)
+  {
+    cursor(acc_delay, mod_delay, speed_delay, pos_delay, dir_delay, true);
+  }
+
+  show(led, pos_delay);
+
+  count++;
+}
+
+void randomize()
+{
+  acc.h = random(CFG_MIN_ACC, CFG_MAX_ACC);
+  acc.v = random(CFG_MIN_ACC, CFG_MAX_ACC);
+  acc.s = random(CFG_MIN_ACC, CFG_MAX_ACC);
+  acc_delay = random(CFG_MIN_ACC, CFG_MAX_ACC);
+  mod.h = random(CFG_MIN_MOD, CFG_MAX_MOD);
+  mod.v = random(CFG_MIN_MOD, CFG_MAX_MOD);
+  mod.s = random(CFG_MIN_MOD, CFG_MAX_MOD);
+  mod_delay = random(CFG_MIN_MOD, CFG_MAX_SPEED);
+  speed.h = random(CFG_MIN_SPEED, CFG_MAX_SPEED);
+  speed.v = random(CFG_MIN_SPEED, CFG_MAX_SPEED);
+  speed.s = random(CFG_MIN_SPEED, CFG_MAX_SPEED);
+  speed_delay = random(CFG_MIN_SPEED, CFG_MAX_SPEED);
+}
+
+void setMode(ModeEnum newMode)
+{
+  switch(newMode)
+  {
+      case ManualColorEditing:
+        led.s = 255;
+        led.v = 255;
+        features = None;
+        break;
+      case ManualColor:
+        if (mode != ManualColorEditing)
+        {
+          led.s = 255;
+          led.v = 255;
+        }
+        features = ChangeVal | FollowSin | ChangeDelay;
+        break;
+      case Rainbow:
+        led.s = 255;
+        led.v = 255;
+        features = ChangeHue | Randomize | ChangeDelay;
+        break;
+      case Crazy:
+        features = ChangeHue | ChangeSat | ChangeVal | FollowSin | Randomize
+          | ChangeDelay;
+        break;
+  };
+
+  mode = newMode;
+}
+
+
+void setup()
+{
+  pinMode(REDPIN, OUTPUT);
+  pinMode(BLUEPIN, OUTPUT);
+  pinMode(GREENPIN, OUTPUT);
+
+  pinMode(CFG_BTN_PIN, INPUT_PULLUP);
+
+  randomSeed(analogRead(0));
+
+  check();
+
+  setMode(ManualColor);
+}
+
+void loop()
+{
+  btn.read();
+
+  if (btn.isPressed())
+  {
+    if (mode == ManualColorEditing || mode == ManualColor && btn.pressedFor(500))
+    {
+      setMode(ManualColorEditing);
+      led.h++;
+
+      show(Black, 5);
+      show(led, 45);
+    }
+    else
+    {
+      show(Red, 5);
+    }
+  }
+  else if (btn.wasReleased())
+  {
+    switch(mode)
+    {
+        case ManualColor:
+          setMode(Rainbow);
+          break;
+        case ManualColorEditing:
+          setMode(ManualColor);
+          break;
+        case Rainbow:
+          setMode(Crazy);
+          break;
+        case Crazy:
+          setMode(ManualColor);
+          break;
+    };
+  }
+  else
+  {
+    if ((mode & Randomize) != 0)
+    {
+      randomize();
+    }
+
+    updateDisplay();
+  }
+}
